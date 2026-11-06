@@ -1,9 +1,12 @@
 # ESP32_devlopment
 
-I'm using esp32-s3 board for these projects.
+I'm using esp32-s3 board for these projects.<br>
+> NOTE :
+> We'll always use the COM port to flash the board and USB port to use it.
 
 ## Tools required
 - arduino-cli
+- esptool
 
 ## Install and Setup
 We need to install the specific tools to be able to use arduino-cli to compile binary for esp32.
@@ -20,8 +23,6 @@ User should be the part of the group "uucp" to be able to interact with the conn
 ```bash
 sudo usernod -aG uucp $USER
 ```
-> NOTE :
-> We'll always use the USB port to flash the board not the COM port. 
 
 ---
 
@@ -63,9 +64,18 @@ arduino-cli monitor -p /dev/ttyACM0 -c baudrate=115200
 ```
 Alternatively, we can also use the inbuilt RGB light of the esp32-s3 board to display different state of our program.
 ```c
-void blink() {
-  neopixelWrite(RGB_BUILTIN, 25, 25, 25);  // (R, G, B: 0-255)
-  delay(50);
-  neopixelWrite(RGB_BUILTIN, 0, 0, 0);     // off
+void blink(uint8_t duration, uint8_t R, uint8_t G, uint8_t B) {
+  /* duration:miliseconds | R:0-255 | G:0-255 | B:0-255 | */
+  neopixelWrite(RGB_BUILTIN, R, G, B);
+  delay(duration);
+  neopixelWrite(RGB_BUILTIN, 0, 0, 0);
 }
+```
+
+---
+
+## Cleaning
+To clean the firmware and want a clean board to work with.
+```bash
+esptool --chip esp32s3 -p /dev/ttyACM0 erase-flash
 ```
